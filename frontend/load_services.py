@@ -87,6 +87,7 @@ def extract_entities(url):
     entities =  get_static_entities()
     try:
         alchemy_entities = alchemyapi.entities('url',url)
+        entities = {}
         for entity in alchemy_entities['entities']:
              
             entity_type = entity['type']
