@@ -71,17 +71,6 @@ def extract_content(url):
     except Exception as e:
         print_exc(e)
     
-    
-#     try:
-#         alchemy_result = alchemyapi.text('url',url)
-#         content['language'] = alchemy_result['language']
-#         content['text'] = alchemy_result['text']
-#         alchemy_result = alchemyapi.image_extraction('url',url)
-#         if 'image' in alchemy_result:
-#             content['image'] = alchemy_result['image']
-#     except Exception as e:
-#         print_exc(e)
-
     return content
 
 def get_static_entities():
@@ -174,13 +163,13 @@ def extract_geographic_locations(locations):
 def extract_sentiment(url):
     data = {}
     data['sentiment'] = 'neutral'
-#     try:
-#         alchemy_result = alchemyapi.sentiment('url',url)
-#         if 'docSentiment' in alchemy_result:
-#             sentiment = alchemy_result['docSentiment']['type']
-#             data['sentiment'] = sentiment.lower()
-#     except Exception as e:
-#         print_exc(e)
+    try:
+        alchemy_result = alchemyapi.sentiment('url',url)
+        if 'docSentiment' in alchemy_result:
+            sentiment = alchemy_result['docSentiment']['type']
+            data['sentiment'] = sentiment.lower()
+    except Exception as e:
+        print_exc(e)
     return data
 
 def analize_news(list_news):
