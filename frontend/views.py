@@ -9,7 +9,8 @@ from django.http import HttpResponseRedirect
 import json
 from frontend.analytics_services import most_important_locations, most_important_sources, most_important_actors,\
     get_actor, get_location, get_source, get_news, get_news_by_actor,\
-    get_news_by_location, get_news_by_source
+    get_news_by_location, get_news_by_source, get_sentiment_frecuencies,\
+    get_general_statistics
 
 from frontend.load_services import load_data
 
@@ -257,3 +258,69 @@ def rest_get_news_by_source(request):
         response['ok'] = 0
         response['message'] = 'Get Method Not Supported!!!'
         return HttpResponse(json.dumps(response), content_type="application/json")    
+
+def index(request):
+    data = {}
+    data['sentiments'] = {}
+    data['sentiments']['positive'] = get_sentiment_frecuencies('positive')
+    data['sentiments']['neutral'] = get_sentiment_frecuencies('neutral')
+    data['sentiments']['negative'] = get_sentiment_frecuencies('negative')
+
+    data.update(get_general_statistics())
+
+    return render_to_response('index.html', data, context_instance=RequestContext(request))
+
+def view_actor(request):
+    context = RequestContext(request)
+    if request.method == 'GET':
+        if 'type' in request.GET and 'name' in request.GET and request.GET['type'] != None and request.GET['name'] != None:
+            type = request.GET['type']
+            name = request.GET['name']
+            data = {'type' : type, 'name' : name}
+            return render_to_response('actor.html', data, context_instance=RequestContext(request))
+        else:
+            data = {}
+            data['ok'] = 0
+            data['message'] = 'Some Field Not Found (Type/Name) !!!'
+            return render_to_response('error.html', data, context_instance=RequestContext(request))
+    else:
+        data = {}
+        data['ok'] = 0
+        data['message'] = 'Get Method Not Supported!!!'
+        return render_to_response('error.html', data, context_instance=RequestContext(request))
+
+def view_location(request):
+    context = RequestContext(request)
+    if request.method == 'GET':
+        if 'name' in request.GET and request.GET['name'] != None:
+            name = request.GET['name']
+            data = {'name' : name}
+            return render_to_response('location.html', data, context_instance=RequestContext(request))
+        else:
+            data = {}
+            data['ok'] = 0
+            data['message'] = 'Field Name Not Found !!!'
+            return render_to_response('error.html', data, context_instance=RequestContext(request))
+    else:
+        data = {}
+        data['ok'] = 0
+        data['message'] = 'Get Method Not Supported!!!'
+        return render_to_response('error.html', data, context_instance=RequestContext(request))
+
+def view_source(request):
+    context = RequestContext(request)
+    if request.method == 'GET':
+        if 'name' in request.GET and request.GET['name'] != None:
+            name = request.GET['name']
+            data = {'name' : name}
+            return render_to_response('source.html', data, context_instance=RequestContext(request))
+        else:
+            data = {}
+            data['ok'] = 0
+            data['message'] = 'Field Name Not Found !!!'
+            return render_to_response('error.html', data, context_instance=RequestContext(request))
+    else:
+        data = {}
+        data['ok'] = 0
+        data['message'] = 'Get Method Not Supported!!!'
+        return render_to_response('error.html', data, context_instance=RequestContext(request))

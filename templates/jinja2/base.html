@@ -1,0 +1,49 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html>
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport" />
+<meta name="description" content="Kueka" />
+
+{% block meta%}
+{% endblock meta%}
+
+{% block title %}
+<title>Kueka</title>
+{% endblock title%}
+
+<link rel="stylesheet" href="{{STATIC_URL}}css/bootstrap.min.css" />
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css" />
+<link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css" />
+<link rel="stylesheet" href="{{STATIC_URL}}css/AdminLTE.min.css" />
+<link rel="stylesheet" href="{{STATIC_URL}}css/skins/skin-blue.min.css" />
+{% block css%}
+{% endblock css%}
+
+
+<script src="{{STATIC_URL}}/js/knockout-3.1.0/knockout-3.1.0.js"></script>
+<script src="{{STATIC_URL}}/js/knockout-3.1.0/knockout.mapping-latest.js"></script>
+<script src="{{STATIC_URL}}/js/knockout-3.1.0/custom-bindings.js"></script>
+<script src="{{STATIC_URL}}js/jquery/jquery-2.1.4.min.js" />
+<script src="{{STATIC_URL}}js/bootstrap.min.js" />
+<script src="{{STATIC_URL}}js/knockout-3.1.0/bootstrap-bindings.js"></script>
+<script src="{{STATIC_URL}}js/knockout-3.1.0/knockstrap.js"></script>
+{% block js_in_head%}
+{% endblock js_in_head%}
+
+</head>
+
+<body class="hold-transition skin-blue sidebar-mini">
+
+{% block container%}
+{% endblock container%}
+
+
+<script src="{{STATIC_URL}}js/kueka/app.js"></script>
+{% block js_in_footer%}
+{% endblock js_in_footer%}
+</body>
+</html>

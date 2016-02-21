@@ -24,7 +24,12 @@ def extract_news_from_rss(url):
     for entry in d.entries:
         link = entry.link
         slug = slugify(entry.title)
-        feeds.append({'title' : entry.title,'slug' : slug ,'url' : link, 'source' : url, 'created' : time.time() })
+
+        obj_datetime = datetime.now()
+        obj_datetime = obj_datetime.replace(hour=0, minute=0, second=0)
+        now = time.mktime(obj_datetime.timetuple())
+        
+        feeds.append({'title' : entry.title,'slug' : slug ,'url' : link, 'description' : entry.description, 'source' : url, 'created' : now })
 
     return feeds
 
@@ -168,11 +173,12 @@ def extract_geographic_locations(locations):
 
 def extract_sentiment(url):
     data = {}
-    data['sentiment'] = ''
+    data['sentiment'] = 'neutral'
 #     try:
 #         alchemy_result = alchemyapi.sentiment('url',url)
 #         if 'docSentiment' in alchemy_result:
-#             data['sentiment'] = alchemy_result['docSentiment']['type']
+#             sentiment = alchemy_result['docSentiment']['type']
+#             data['sentiment'] = sentiment.lower()
 #     except Exception as e:
 #         print_exc(e)
     return data

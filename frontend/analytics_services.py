@@ -296,7 +296,9 @@ def get_news(date_from=None, date_to=None, page_number=0, page_size=10):
     result = {}
     content = []
     for doc in cursor:
-        
+        object_id = doc['_id']
+        del(doc['_id'])
+        doc['_id'] = str(object_id)
         content.append(doc)
 
     result['page_number'] = page_number
@@ -339,6 +341,9 @@ def get_news_by_actor(entity_type, name, date_from=None, date_to=None, page_numb
     result = {}
     content = []
     for doc in cursor:
+        object_id = doc['_id']
+        del(doc['_id'])
+        doc['_id'] = str(object_id)
         content.append(doc)
 
     result['page_number'] = page_number
@@ -413,6 +418,9 @@ def get_news_by_source(name, date_from=None, date_to=None, page_number=0, page_s
     result = {}
     content = []
     for doc in cursor:
+        object_id = doc['_id']
+        del(doc['_id'])
+        doc['_id'] = str(object_id)
         content.append(doc)
 
     result['page_number'] = page_number
@@ -424,32 +432,97 @@ def get_news_by_source(name, date_from=None, date_to=None, page_number=0, page_s
 
     return result
 
+from bson.son import SON
+
+def get_sentiment_frecuencies(sentiment, date_from=None, date_to=None):
+    if date_to is None:
+        date_to = datetime.now()
+        date_to = date_to.replace(hour=23, minute=59, second=59)
+    range_to = int(date_to.strftime("%s"))
+        
+    if date_from is None:    
+        date_from = date_to.replace(hour=0, minute=0, second=0) - timedelta(days=5)    
+    range_from = int(date_from.strftime("%s"))
+
+    query = {'created' : {'$gte' : range_from, '$lte' :  range_to}, 'sentiment' : sentiment}
+    
+    news_col = db['news'] 
+    pipeline = [ {"$match": query},{"$group": {"_id": {'sentiment' : "$sentiment", 'created' : '$created'}, "count": {"$sum": 1} }  },{'$limit' : 5}, 
+                {"$sort": SON([("count", -1), ("_id", -1), ('created', -1) ])}]
+    results = list(news_col.aggregate(pipeline))
+    frecuencies = ','.join([str(e['count']) for e in results])
+    return frecuencies
+
+def get_general_statistics(date_from=None, date_to=None):
+    if date_to is None:
+        date_to = datetime.now()
+        date_to = date_to.replace(hour=23, minute=59, second=59)
+    range_to = int(date_to.strftime("%s"))
+        
+    if date_from is None:    
+        date_from = date_to.replace(hour=0, minute=0, second=0) - timedelta(days=5)    
+    range_from = int(date_from.strftime("%s"))
+
+    query = {'created' : {'$gte' : range_from, '$lte' :  range_to}}
+
+    statistics = {}
+    
+    news_col = db['news']
+    statistics['news'] = news_col.find(query).count()      
+
+    cypher = graph.cypher
+
+    cquery = 'MATCH (me:Person) RETURN COUNT(me) '
+    cypher_result = cypher.execute(cquery, date_from=date_from, date_to=date_to)
+    count_persons = cypher_result[0][0]
+
+    cquery = 'MATCH (me:Organization) RETURN COUNT(me) '
+    cypher_result = cypher.execute(cquery, date_from=date_from, date_to=date_to)
+    count_organizations = cypher_result[0][0]
+    statistics['actors'] = count_organizations + count_persons      
+
+    cquery = 'MATCH (me:Source) RETURN COUNT(me) '
+    cypher_result = cypher.execute(cquery, date_from=date_from, date_to=date_to)
+    count_sources = cypher_result[0][0]
+    statistics['sources'] = count_sources      
+    
+    cquery = 'MATCH (me:Location) RETURN COUNT(me) '
+    cypher_result = cypher.execute(cquery, date_from=date_from, date_to=date_to)
+    count_locations = cypher_result[0][0]
+    statistics['locations'] = count_locations      
+
+    return statistics
+
+
 
 if __name__ == '__main__':
 
-    results = most_important_actors('Person')
-    print results
- 
-    results = most_important_actors('Organization')
-    print results
- 
-    results = most_important_locations()
-    print results
- 
-    results = get_news(page_number=3)
-    print results
- 
-    results = get_news_by_actor('Person', 'Henrique Capriles')
-    print results
-         
-    results = get_actor('Person', 'Henrique Capriles')
-    print(json.dumps(results, sort_keys=True, indent=4, separators=(',', ': ')))
- 
-    results = get_actor('Organization', 'Empresas Polar')
-    print(json.dumps(results, sort_keys=True, indent=4, separators=(',', ': ')))
- 
-    results = get_location('Cuba')
-    print(json.dumps(results, sort_keys=True, indent=4, separators=(',', ': ')))
-  
-    results = get_source('http://www.elimpulso.com/feed')
-    print(json.dumps(results, sort_keys=True, indent=4, separators=(',', ': ')))
+#     print(get_sentiment_frecuencies('neutral'))
+    print(get_general_statistics())
+
+#     results = most_important_actors('Person')
+#     print results
+#  
+#     results = most_important_actors('Organization')
+#     print results
+#  
+#     results = most_important_locations()
+#     print results
+#  
+#     results = get_news(page_number=3)
+#     print results
+#  
+#     results = get_news_by_actor('Person', 'Henrique Capriles')
+#     print results
+#          
+#     results = get_actor('Person', 'Henrique Capriles')
+#     print(json.dumps(results, sort_keys=True, indent=4, separators=(',', ': ')))
+#  
+#     results = get_actor('Organization', 'Empresas Polar')
+#     print(json.dumps(results, sort_keys=True, indent=4, separators=(',', ': ')))
+#  
+#     results = get_location('Cuba')
+#     print(json.dumps(results, sort_keys=True, indent=4, separators=(',', ': ')))
+#   
+#     results = get_source('http://www.elimpulso.com/feed')
+#     print(json.dumps(results, sort_keys=True, indent=4, separators=(',', ': ')))
