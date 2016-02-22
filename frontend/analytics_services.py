@@ -127,24 +127,34 @@ RETURN other,countNews
     return results
 
 def get_summary_wikipedia(name):
-    wikipedia.set_lang("en")
-    wiki=wikipedia.summary(name)
+#     wikipedia.set_lang("en")
+    wiki = None
+    try:
+        wiki=wikipedia.summary(name)
+    except Exception as e:
+        pass            
+
     return wiki
 
 def get_metadata_wikipedia(name):
     metadata = {}
-    wikipedia.set_lang("es")
-    wiki=wikipedia.WikipediaPage(name)
-    if not wiki is None:
-        try:
-            tuple_coordinates = wiki.coordinates
-            metadata['latitude'] = tuple_coordinates[0]
-            metadata['longitude'] = tuple_coordinates[1]            
-        except Exception as e:
-            pass            
-        
-        metadata['images'] = wiki.images            
-        metadata['text'] = wiki.summary            
+    metadata['images'] = []            
+    metadata['text'] = 'Description Not Found'            
+#     wikipedia.set_lang("es")
+    try:
+        wiki=wikipedia.WikipediaPage(name)
+        if not wiki is None:
+            try:
+                tuple_coordinates = wiki.coordinates
+                metadata['latitude'] = tuple_coordinates[0]
+                metadata['longitude'] = tuple_coordinates[1]            
+            except Exception as e:
+                pass            
+            
+            metadata['images'] = wiki.images            
+            metadata['text'] = wiki.summary            
+    except Exception as e:
+        pass            
 
     return metadata
     
