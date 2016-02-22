@@ -7,7 +7,7 @@
       <header class="main-header">
 
         <!-- Logo -->
-        <a href="#" class="logo">
+        <a href="/frontend" class="logo">
           <!-- mini logo for sidebar mini 50x50 pixels -->
           <span class="logo-mini"><b>K</b></span>
           <!-- logo for regular state and mobile devices -->
@@ -37,7 +37,7 @@
               <img src="{{STATIC_URL}}/img/avatar5.png" class="img-circle" alt="User Image">
             </div>
             <div class="pull-left info">
-              <p>Ramon Valera</p>
+              <p>Ramon Valera (ramon.valera@gmail.com)</p>
               <!-- Status -->
             </div>
           </div>
@@ -189,7 +189,7 @@
 										<img src="{{STATIC_URL}}/img/default-50x50.gif" data-bind="attr:{alt: title}">
 									</div>
 									<div class="product-info">
-										<a href="javascript::;" class="product-title" ><span data-bind="text: title"></span></a> <span
+										<a class="product-title" target="_blank" data-bind="attr:{href: url}"  ><span data-bind="text: title"></span></a> <span
 											class="product-description" data-bind="text: text"></span>
 									</div>
 								</li>
@@ -217,8 +217,8 @@
 							<ul class="users-list clearfix">
 								<!-- ko foreach : { data: top_persons()  } -->
 								<li>
-										<img src="{{STATIC_URL}}/img/default-50x50.gif" data-bind="attr:{alt: name}" /> 
-										<a class="users-list-name" href="#"><span data-bind="text: name" ></span></a> 
+										<img src="{{STATIC_URL}}/img/default-50x50.gif"  />  
+										<a class="users-list-name"  data-bind="attr:{alt: name, href: url}" ><span data-bind="text: name" ></span></a> 
 <!-- 										<span class="users-list-date" data-bind="text: title" ></span> -->
 								</li>
 						        <!-- /ko -->
@@ -245,7 +245,7 @@
 								<!-- ko foreach : { data: top_organizations()  } -->
 								<li>
 										<img src="{{STATIC_URL}}/img/default-50x50.gif" data-bind="attr:{alt: name}" /> 
-										<a class="users-list-name" href="#"><span data-bind="text: name" ></span></a> 
+										<a class="users-list-name" data-bind="attr:{alt: name, href: url}" ><span data-bind="text: name" ></span></a> 
 <!-- 										<span class="users-list-date" data-bind="text: title" ></span> -->
 								</li>
 						        <!-- /ko -->
@@ -283,9 +283,12 @@
 <!-- 							<a href="javascript::;" class="uppercase">View All Products</a> -->
 <!-- 						</div> -->
 					</div>
+
 				</div>
 
 			</div>
+
+
 		</section>
 
 	</div><!-- /.content-wrapper -->
@@ -312,7 +315,10 @@
 <script src="{{STATIC_URL}}js/jvectormap/jquery-jvectormap-world-mill-en.js"></script>
 <script src="{{STATIC_URL}}js/slimScroll/jquery.slimscroll.min.js"></script>
 <script src="{{STATIC_URL}}js/chartjs/Chart.min.js"></script>
-<!-- <script src="{{STATIC_URL}}js/app.min.js" ></script> -->
+<script src="{{STATIC_URL}}js/app.js" ></script>
+<script src="{{STATIC_URL}}js/demo.js" ></script>
+<script src="{{STATIC_URL}}js/kueka/app-index.js"></script>
+
 <!-- <script src="{{STATIC_URL}}js/pages/dashboard2.js"/> -->
 <script type="text/javascript">
 //-----------------

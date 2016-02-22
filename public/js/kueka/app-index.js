@@ -32,6 +32,7 @@ function KuekaVM() {
 			},
 			success : function(data) {
 				data.content.forEach(function (element) {
+					element['url'] = 'view-actor?type=Person&name='+element.name
 					ko_element = ko.mapping.fromJS(element);
 					self.top_persons.push(ko_element);
 				});	
@@ -53,6 +54,7 @@ function KuekaVM() {
 			},
 			success : function(data) {
 				data.content.forEach(function (element) {
+					element['url'] = 'view-actor?type=Organization&name='+element.name
 					ko_element = ko.mapping.fromJS(element);
 					self.top_organizations.push(ko_element);
 				});	
@@ -153,7 +155,8 @@ function KuekaVM() {
 
     	 html_text = '<div><h3 class="popover-title" style="padding-right: 0px; background-color: white; padding-left: 0px;">'+
 			'<b>'+post.title+'</b></h3>'+
-			'<p><small>'+post.text+'</small> ';    	 
+			'<p><small>'+post.description+'</small><br/> ' +
+			'<a class="product-title" target="_blank" href="'+post.url+'"  >Go to ...</span></a>';    	 
     	 
      	var infowindow = new google.maps.InfoWindow({
      		content: html_text

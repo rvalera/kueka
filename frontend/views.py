@@ -276,7 +276,8 @@ def view_actor(request):
         if 'type' in request.GET and 'name' in request.GET and request.GET['type'] != None and request.GET['name'] != None:
             type = request.GET['type']
             name = request.GET['name']
-            data = {'type' : type, 'name' : name}
+            actor = get_actor(type,name)
+            data = {'type' : type, 'name' : name, 'actor' : actor}
             return render_to_response('actor.html', data, context_instance=RequestContext(request))
         else:
             data = {}

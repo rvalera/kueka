@@ -11,8 +11,6 @@ urlpatterns = patterns('',
     url(r'^view-location', view_location, name='view_location'),
 
     url(r'^all-news', rest_get_news, name='get_news'),    
-                       
-    url(r'^all-news', rest_get_news, name='get_news'),    
     url(r'^load-data', rest_load_data, name='load_data'),    
 
     url(r'^actor', rest_get_actor, name='get_actor'),    
